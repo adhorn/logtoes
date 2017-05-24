@@ -1,4 +1,6 @@
 import uuid
+import sys
+import logging
 from flask import current_app
 from elasticsearch import Elasticsearch
 
@@ -9,17 +11,26 @@ except ImportError:
     from logtoes.default_settings import ELASTICSEARCH_URL, \
         ELASTICSEARCH_INDEX, ELASTICSEARCH_ENABLED, ELASTICSEARCH_SETTINGS
 
+es = Elasticsearch([
+    {'host': ELASTICSEARCH_URL},
+])
+
+if ELASTICSEARCH_ENABLED:
+    try:
+        es.indices.create(
+            index=ELASTICSEARCH_INDEX,
+            ignore=400,
+            body=ELASTICSEARCH_SETTINGS
+        )
+    except Exception as exc:
+        logging .warning("Elasticsearch no found {}".format(exc))
+        pass
+
 
 def send_to_elk(data, doc_type):
     if ELASTICSEARCH_ENABLED:
         try:
-            es = Elasticsearch([{'host': ELASTICSEARCH_URL}])
 
-            es.indices.create(
-                index=ELASTICSEARCH_INDEX,
-                ignore=400,
-                body=ELASTICSEARCH_SETTINGS
-            )
             res = es.index(
                 index=ELASTICSEARCH_INDEX,
                 doc_type=doc_type,
