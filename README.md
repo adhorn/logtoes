@@ -10,17 +10,22 @@ Demo Flask app for running logtoes - logs are now sent in real-time to an Elasti
 Simple demo of the asynchronous worker pattern using Flask and Celery.
 This demo demonstrates the use of a python decorator to send API logs to Elasticsearch in real-time for analysis.
 
-![Architecture](https://github.com/adhorn/logtoes/blob/master/pics/demo1.png)
-
-![How it works (part1)](https://github.com/adhorn/logtoes/blob/master/pics/demo2.png)
-
-![How it works (part2)](https://github.com/adhorn/logtoes/blob/master/pics/demo3.png)
+![Logs to ES](https://github.com/adhorn/logtoes/blob/master/pics/demo0.png)
 
 
 **Why this demo?**:
 
 While Flask + Celery code is very common on the internet, I could not find any ready-to-use example which would combine all the bells and whistles necessary to run code in production.
 This code here gives you just that (hopefully).
+
+
+**Asynchronous Pattern on AWS**:
+
+![Architecture](https://github.com/adhorn/logtoes/blob/master/pics/demo1.png)
+
+![How it works (part1)](https://github.com/adhorn/logtoes/blob/master/pics/demo2.png)
+
+![How it works (part2)](https://github.com/adhorn/logtoes/blob/master/pics/demo3.png)
 
 
 **What is Flask?**: 
