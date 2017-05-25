@@ -48,7 +48,7 @@ if ELASTICSEARCH_ENABLED:
             body=ELASTICSEARCH_SETTINGS
         )
     except Exception as exc:
-        logging .warning("Elasticsearch no found {}".format(exc))
+        logging .warning("Elasticsearch not found {}".format(exc))
         pass
 
 
@@ -62,7 +62,7 @@ def send_to_elk(data, doc_type):
                 body=data)
             return res
         except Exception as exc:
-            current_app.logger.warning("Elasticsearch no found {}".format(exc))
+            current_app.logger.warning("Elasticsearch not found {}".format(exc))
             return True
     else:
         return True
