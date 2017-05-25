@@ -1,7 +1,5 @@
 
 
-
-
 **LogToES**:
 
 Simple demo of the asynchronous worker pattern using Flask and Celery.
@@ -12,8 +10,8 @@ This demo demonstrates the use of a python decorator to send API logs to Elastic
 
 **Why this demo?**:
 
-While Flask + Celery code is very common on the internet, I could not find any ready-to-use example which would combine all the bells and whistles necessary to run the asynchronous pattern code in production. This demo also uses Gunicorn to serve the Flask application.
-This code here gives you just that (hopefully).
+While Flask + Celery code is very common on the internet, I could not find any ready-to-use example which would combine all the bells and whistles necessary to run the asynchronous pattern code in production. This code here gives you just that (hopefully).
+This demo also uses Gunicorn to serve the Flask application.
 
 
 **Asynchronous Pattern on AWS**:
