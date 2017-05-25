@@ -40,7 +40,7 @@ BROKER_FAILOVER_STRATEGY = "round-robin"
 BROKER_HEARTBEAT = 10
 
 
-ELASTICSEARCH_URL = 'localhost'
+ELASTICSEARCH_URL = 'search-logfree2-sqykcx5idthnc7tg2iw3nsefvm.eu-west-1.es.amazonaws.com'
 ELASTICSEARCH_PORT = 9200
 ELASTICSEARCH_INDEX = 'logtoes'
 ELASTICSEARCH_MAPPPING = 'logtoes'
