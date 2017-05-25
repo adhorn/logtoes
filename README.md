@@ -97,6 +97,14 @@ $ celery -A start_celery flower --port=4444
 * running on http://localhost:4444/tasks
 ```
 
+Connect into Kibana endpoint found from the Amazon Elasticsearch Service and create an index in setting:
+  
+ ```
+ Index seach pattern: logtoes
+ Select datetime
+ ```
+
+ Vizualise - Enjoy :)
 
 **Note:**
 
