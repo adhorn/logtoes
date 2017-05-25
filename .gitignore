@@ -6,6 +6,8 @@ __pycache__/
 *.py[cod]
 *.pyc
 
+dump.rdb
+
 #database
 *.sqlite
 *.db
