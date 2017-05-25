@@ -21,7 +21,7 @@ def reverse_geo_ip(ip_address):
     return dict()
 
 
-@ce.task(bind=True, default_retry_delay=5)
+@ce.task(bind=True, default_retry_delay=1)
 def prep_to_elk(self, data, doc_type):
     ip_address = data['ip']
     location_blob = reverse_geo_ip(ip_address)
@@ -47,7 +47,7 @@ def prep_to_elk(self, data, doc_type):
             send_to_elk(data, doc_type)
         return True
     except Exception as exc:
-            raise self.retry(exc=exc, countdown=5)
+            raise self.retry(exc=exc, countdown=1)
 
 
 @ce.task(bind=True)

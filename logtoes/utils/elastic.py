@@ -1,8 +1,8 @@
 import uuid
-import sys
 import logging
+import boto3
 from flask import current_app
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, RequestsHttpConnection
 
 try:
     from logtoes.settings import ELASTICSEARCH_URL, ELASTICSEARCH_INDEX, \
@@ -11,9 +11,34 @@ except ImportError:
     from logtoes.default_settings import ELASTICSEARCH_URL, \
         ELASTICSEARCH_INDEX, ELASTICSEARCH_ENABLED, ELASTICSEARCH_SETTINGS
 
-es = Elasticsearch([
-    {'host': ELASTICSEARCH_URL},
-])
+from requests_aws4auth import AWS4Auth
+
+host = ELASTICSEARCH_URL
+
+session = boto3.Session()
+credentials = session.get_credentials()
+# region = os.environ['AWS_REGION']
+
+awsauth = AWS4Auth(
+    credentials.access_key,
+    credentials.secret_key,
+    'eu-west-1',
+    'es',
+    session_token=credentials.token
+)
+
+es = Elasticsearch(
+    hosts=[{'host': host, 'port': 443}],
+    http_auth=awsauth,
+    use_ssl=True,
+    verify_certs=True,
+    connection_class=RequestsHttpConnection
+)
+
+
+# es = Elasticsearch([
+#     {'host': ELASTICSEARCH_URL},
+# ])
 
 if ELASTICSEARCH_ENABLED:
     try:
@@ -30,7 +55,6 @@ if ELASTICSEARCH_ENABLED:
 def send_to_elk(data, doc_type):
     if ELASTICSEARCH_ENABLED:
         try:
-
             res = es.index(
                 index=ELASTICSEARCH_INDEX,
                 doc_type=doc_type,
