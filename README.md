@@ -106,6 +106,8 @@ Connect into Kibana endpoint found from the Amazon Elasticsearch Service and cre
 
  Vizualise - Enjoy :)
 
+![Kibana](https://github.com/adhorn/logtoes/blob/master/pics/demo4.png)
+
 **Note:**
 
 This demo used Geocity to enrich the log information with the location (converting IP to Country) - if you want to update the data, do the following:
