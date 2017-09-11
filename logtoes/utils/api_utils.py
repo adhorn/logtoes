@@ -73,8 +73,22 @@ def log_entry(fn):
             '@timestamp': datetime.utcnow().strftime(
                 "%Y-%m-%dT%H:%M:%S")
         }
-
         tasks.prep_to_elk.delay(data, 'api_requests')
+        data_firehose = {
+            'user': '{}'.format(auth_user),
+            'request': '{0} {1}'.format(request.method, request.path),
+            'status_code': '{}'.format(status_code),
+            'query': '{}'.format(request.query_string),
+            'ip': '{}'.format(ip_address),
+            'agent': '{0} | {1} {2}'.format(
+                request.user_agent.platform,
+                request.user_agent.browser,
+                request.user_agent.version),
+            'raw_agent': '{}'.format(request.user_agent.string),
+            '@timestamp': datetime.utcnow().strftime(
+                "%Y-%m-%d %H:%M:%S")
+        }
+        tasks.prep_to_firehose.delay(data_firehose, 'Data')
         current_app.logger.debug(
             """
 User:       {user}

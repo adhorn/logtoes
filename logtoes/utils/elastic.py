@@ -48,7 +48,7 @@ if ELASTICSEARCH_ENABLED:
             body=ELASTICSEARCH_SETTINGS
         )
     except Exception as exc:
-        logging .warning("Elasticsearch not found {}".format(exc))
+        logging.warning("Elasticsearch not found {}".format(exc))
         pass
 
 

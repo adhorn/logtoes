@@ -2,12 +2,13 @@ import pygeoip
 from flask import current_app
 from logtoes.celery.extensions import celery as ce
 from logtoes.utils.elastic import send_to_elk
+from logtoes.utils.firehose import send_to_firehose
 
 
 try:
-    from logtoes.settings import GEO_FILE, ELASTICSEARCH_ENABLED
+    from logtoes.settings import GEO_FILE, ELASTICSEARCH_ENABLED, FIREHOSE_ENABLED
 except ImportError:
-    from logtoes.default_settings import GEO_FILE, ELASTICSEARCH_ENABLED
+    from logtoes.default_settings import GEO_FILE, ELASTICSEARCH_ENABLED, FIREHOSE_ENABLED
 
 
 gi = pygeoip.GeoIP(GEO_FILE, pygeoip.MEMORY_CACHE)
@@ -45,6 +46,35 @@ def prep_to_elk(self, data, doc_type):
 
         if ELASTICSEARCH_ENABLED:
             send_to_elk(data, doc_type)
+        return True
+    except Exception as exc:
+            raise self.retry(exc=exc, countdown=1)
+
+
+@ce.task(bind=True, default_retry_delay=1)
+def prep_to_firehose(self, data, doc_type):
+    ip_address = data['ip']
+    location_blob = reverse_geo_ip(ip_address)
+    #  The field that contains the coordinates, in geojson format.
+    #  GeoJSON is [longitude,latitude] in an array.
+    #  Different from most implementations, which use latitude, longitude
+    location = [
+        float(
+            location_blob.get('longitude', '0')
+        ), float(
+            location_blob.get('latitude', '0')
+        )
+    ]
+    country = '{0}'.format(location_blob.get('country_name', 'unkown'))
+    data.update({'location': location})
+    data.update({'country': country})
+
+    try:
+        current_app.logger.debug(
+            "Task: logs to Firehose for use in Athena:  {}".format(data))
+
+        if FIREHOSE_ENABLED:
+            send_to_firehose(data, doc_type)
         return True
     except Exception as exc:
             raise self.retry(exc=exc, countdown=1)
