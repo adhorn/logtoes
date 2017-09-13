@@ -25,6 +25,6 @@ def send_to_firehose(data, doc_type):
 
     response = firehose.put_record(
             DeliveryStreamName=FIREHOSE_STREAM,
-            Record={'Data': json.dumps(data)}
+            Record={'Data': json.dumps(data) + '\n'}
         )
     return True if response else False

@@ -85,7 +85,7 @@ def log_entry(fn):
                 request.user_agent.browser,
                 request.user_agent.version),
             'raw_agent': '{}'.format(request.user_agent.string),
-            '@timestamp': datetime.utcnow().strftime(
+            'datetime': datetime.utcnow().strftime(
                 "%Y-%m-%d %H:%M:%S")
         }
         tasks.prep_to_firehose.delay(data_firehose, 'Data')

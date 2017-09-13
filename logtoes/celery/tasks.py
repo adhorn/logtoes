@@ -53,31 +53,9 @@ def prep_to_elk(self, data, doc_type):
 
 @ce.task(bind=True, default_retry_delay=1)
 def prep_to_firehose(self, data, doc_type):
-    ip_address = data['ip']
-    location_blob = reverse_geo_ip(ip_address)
-    #  The field that contains the coordinates, in geojson format.
-    #  GeoJSON is [longitude,latitude] in an array.
-    #  Different from most implementations, which use latitude, longitude
-    location = [
-        float(
-            location_blob.get('longitude', '0')
-        ), float(
-            location_blob.get('latitude', '0')
-        )
-    ]
-    country = '{0}'.format(location_blob.get('country_name', 'unkown'))
-    data.update({'location': location})
-    data.update({'country': country})
-
-    try:
-        current_app.logger.debug(
-            "Task: logs to Firehose for use in Athena:  {}".format(data))
-
-        if FIREHOSE_ENABLED:
-            send_to_firehose(data, doc_type)
-        return True
-    except Exception as exc:
-            raise self.retry(exc=exc, countdown=1)
+    if FIREHOSE_ENABLED:
+        return True if send_to_firehose(data, doc_type) else False
+    return True
 
 
 @ce.task(bind=True)
