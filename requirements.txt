@@ -1,6 +1,6 @@
 amqp==2.1.4
 aniso8601==1.2.1
-Babel==2.4.0
+Babel==2.9.1
 backports.ssl-match-hostname==3.5.0.1
 billiard==3.5.0.2
 boto==2.46.1
