@@ -6,7 +6,7 @@ billiard==3.5.0.2
 boto==2.46.1
 boto3==1.4.4
 botocore==1.5.55
-celery==4.0.2
+celery==5.2.2
 certifi==2017.4.17
 click==6.7
 docutils==0.13.1
